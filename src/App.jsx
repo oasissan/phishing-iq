@@ -12,13 +12,15 @@ export default function App() {
     const [gameStarted, setGameStarted] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
     const [shuffledScenarios, setShuffledScenarios] = useState([]);
-    const total = scenarios.length;
+    const total = 10; // Limit quiz to 10 questions
 
     // Shuffle the scenarios when the game starts
     useEffect(() => {
         // Ensure we have scenarios loaded when the game starts
         if (gameStarted && shuffledScenarios.length === 0) {
-            setShuffledScenarios([...scenarios].sort(() => Math.random() - 0.5));
+            // Shuffle all scenarios and take only the first 10
+            const shuffled = [...scenarios].sort(() => Math.random() - 0.5).slice(0, 10);
+            setShuffledScenarios(shuffled);
         }
     }, [gameStarted, shuffledScenarios.length]);
 
@@ -42,7 +44,9 @@ export default function App() {
     };
 
     const startGame = () => {
-        setShuffledScenarios([...scenarios].sort(() => Math.random() - 0.5));
+        // Shuffle all scenarios and take only the first 10
+        const shuffled = [...scenarios].sort(() => Math.random() - 0.5).slice(0, 10);
+        setShuffledScenarios(shuffled);
         setGameStarted(true);
     };
 
