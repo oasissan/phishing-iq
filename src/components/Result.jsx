@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function Result({ score, total, onRestart }) {
+export default function Result({ score, total, onRestart, onScannerOpen }) {
     const [animate, setAnimate] = useState(false);
     const pct = Math.round((score / total) * 100);
     const grade = pct >= 90 ? "A" : pct >= 75 ? "B" : pct >= 50 ? "C" : "D";
@@ -109,12 +109,24 @@ export default function Result({ score, total, onRestart }) {
                 </ul>
             </div>
 
-            <button
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl w-full transition-all duration-300 transform hover:scale-105 font-medium"
-                onClick={onRestart}
-            >
-                Play Again
-            </button>
+            <div className="space-y-3">
+                <button
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl w-full transition-all duration-300 transform hover:scale-105 font-medium"
+                    onClick={onRestart}
+                >
+                    Play Again
+                </button>
+                
+                <button
+                    className="bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 px-6 py-3 rounded-xl w-full transition-all duration-300 font-medium flex items-center justify-center"
+                    onClick={onScannerOpen}
+                >
+                    <span className="mr-2">Try the URL Scanner</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 001.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
         </div>
     );
 }

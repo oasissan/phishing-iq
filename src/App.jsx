@@ -5,6 +5,7 @@ import Result from "./components/Result";
 import ProgressBar from "./components/ProgressBar";
 import Confetti from "./components/Confetti";
 import Header from "./components/Header";
+import PhishingScanner from "./components/PhishingScanner";
 
 export default function App() {
     const [current, setCurrent] = useState(0);
@@ -12,6 +13,7 @@ export default function App() {
     const [gameStarted, setGameStarted] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
     const [shuffledScenarios, setShuffledScenarios] = useState([]);
+    const [showScanner, setShowScanner] = useState(false);
     const total = 10; // Limit quiz to 10 questions
 
     // Shuffle the scenarios when the game starts
@@ -48,6 +50,17 @@ export default function App() {
         const shuffled = [...scenarios].sort(() => Math.random() - 0.5).slice(0, 10);
         setShuffledScenarios(shuffled);
         setGameStarted(true);
+        setShowScanner(false);
+    };
+    
+    const openScanner = () => {
+        setGameStarted(false);
+        setShowScanner(true);
+    };
+    
+    const backToHome = () => {
+        setShowScanner(false);
+        setGameStarted(false);
     };
 
 
@@ -57,7 +70,7 @@ export default function App() {
 
             <Header />
 
-            {!gameStarted ? (
+            {!gameStarted && !showScanner ? (
                 <div className="max-w-xl w-full bg-white rounded-2xl shadow-lg p-8 mb-6 transform transition-all duration-300 hover:shadow-xl">
                     <h2 className="text-2xl font-semibold text-indigo-800 mb-4">Welcome to Phishing IQ</h2>
                     <div className="flex justify-center mb-6">
@@ -75,15 +88,42 @@ export default function App() {
                         You'll be presented with {total} different scenarios. For each one, decide whether it's a legitimate message
                         or a phishing attempt.
                     </p>
-                    <button
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl w-full transition-all duration-300 transform hover:scale-105 font-medium flex items-center justify-center"
-                        onClick={startGame}
-                    >
-                        <span className="mr-2">Start Quiz</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                    </button>
+                    <div className="space-y-3">
+                        <button
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl w-full transition-all duration-300 transform hover:scale-105 font-medium flex items-center justify-center"
+                            onClick={startGame}
+                        >
+                            <span className="mr-2">Start Quiz</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        
+                        <button
+                            className="bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 px-6 py-3 rounded-xl w-full transition-all duration-300 font-medium flex items-center justify-center"
+                            onClick={openScanner}
+                        >
+                            <span className="mr-2">URL & Email Scanner</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 001.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            ) : showScanner ? (
+                <div className="w-full max-w-3xl">
+                    <div className="mb-6">
+                        <button
+                            onClick={backToHome}
+                            className="flex items-center text-indigo-600 hover:text-indigo-800"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                            </svg>
+                            Back to Home
+                        </button>
+                    </div>
+                    <PhishingScanner />
                 </div>
             ) : current < total && shuffledScenarios.length > 0 ? (
                 <div className="w-full max-w-xl">
@@ -101,7 +141,7 @@ export default function App() {
                     )}
                 </div>
             ) : (
-                <Result score={score} total={total} onRestart={restart} />
+                <Result score={score} total={total} onRestart={restart} onScannerOpen={openScanner} />
             )}
 
             <div className="text-sm text-gray-600 mt-4">
